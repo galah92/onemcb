@@ -6,7 +6,8 @@ use axum::{
 };
 use std::sync::{Arc, Mutex};
 use tokio::net::TcpListener;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+use tracing::level_filters::LevelFilter;
+use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 #[derive(Template)]
 #[template(path = "index.html")]
@@ -27,13 +28,19 @@ type SharedState = Arc<Mutex<Vec<bool>>>;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Initialize tracing
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::new(
-            std::env::var("RUST_LOG").unwrap_or_else(|_| "info".into()),
-        ))
-        .with(tracing_subscriber::fmt::layer())
-        .init();
+    let layer = tracing_subscriber::fmt::layer();
+    let filter = EnvFilter::from_default_env().add_directive(LevelFilter::INFO.into());
+    if std::env::var("RUST_LOG_PRETTY").is_ok() {
+        tracing_subscriber::registry()
+            .with(filter)
+            .with(layer.pretty())
+            .init();
+    } else {
+        tracing_subscriber::registry()
+            .with(filter)
+            .with(layer.json())
+            .init();
+    }
 
     const NUM_CHECKBOXES: usize = 1_000; // not exactly one million, but close enough
     let state = Arc::new(Mutex::new(vec![false; NUM_CHECKBOXES]));
