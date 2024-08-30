@@ -1,0 +1,2 @@
+<input type="checkbox" id="checkbox-{{ index }}" {% if checked %}checked{% endif %} hx-post="/toggle/{{ index }}"
+  hx-swap="outerHTML" hx-trigger="click">

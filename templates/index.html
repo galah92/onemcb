@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>One Million Checkboxes</title>
+  <title>{{ title }}</title>
   <script src="https://unpkg.com/htmx.org@1.9.2"></script>
   <style>
     .grid {
@@ -16,7 +16,13 @@
 </head>
 
 <body>
-  <h1>One Million Checkboxes</h1>
+  <h1>{{ title }}</h1>
+  <p>{{ message }}</p>
+  <div class="grid">
+    {% for (index, checked) in checkboxes.iter().enumerate() %}
+    {% include "checkbox.html" %}
+    {% endfor %}
+  </div>
 </body>
 
 </html>
