@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }}</title>
   <script src="https://unpkg.com/htmx.org@2.0.2"></script>
+  <script src="https://unpkg.com/htmx-ext-sse@2.2.2/sse.js"></script>
   <style>
     .grid {
       display: grid;
@@ -18,11 +19,16 @@
 <body>
   <h1>{{ title }}</h1>
   <p>{{ message }}</p>
+  <div id="counter" hx-ext="sse" sse-connect="/sse-counter" sse-swap="message">
+  </div>
   <div class="grid">
     {% for (index, checked) in checkboxes.iter().enumerate() %}
     {% include "checkbox.html" %}
     {% endfor %}
   </div>
+</body>
+
+</html>
 </body>
 
 </html>
