@@ -89,9 +89,8 @@
 
 
   <style>
-    .grid {
-      grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
-      gap: 5px;
+    .checkbox-grid {
+      grid-template-columns: repeat(auto-fill, 16px);
     }
   </style>
 
@@ -100,10 +99,10 @@
 <body>
   <main class="container">
     <h1>{{ title }}</h1>
-    <p>{{ message }}</p>
+    <h2>{{ message }}</h2>
     <div id="counter" hx-ext="sse" sse-connect="/sse-counter" sse-swap="message">
     </div>
-    <div class="grid">
+    <div class="grid checkbox-grid">
       {% for (index, checked) in checkboxes.iter().enumerate() %}
       {% include "checkbox.html" %}
       {% endfor %}
