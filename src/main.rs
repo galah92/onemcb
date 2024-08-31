@@ -8,6 +8,7 @@ use axum::{
 use futures::stream::{self, Stream};
 use std::convert::Infallible;
 use std::sync::{Arc, Mutex};
+use std::time::Duration;
 use tokio::net::TcpListener;
 use tokio_stream::StreamExt as _;
 use tracing::level_filters::LevelFilter;
@@ -97,7 +98,7 @@ struct CheckboxTemplate {
 
 async fn sse_counter() -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
     let stream = stream::unfold(0, |counter| async move {
-        tokio::time::sleep(std::time::Duration::from_secs(1)).await;
+        tokio::time::sleep(Duration::from_secs(1)).await;
         let counter = counter + 1;
         let template = CounterTemplate { counter };
         let event = Event::default().data(template.render().unwrap());
